@@ -261,10 +261,14 @@ async function enviar(ev,form){
     INSCRIPCIONES.push(datos); form.classList.remove("open"); render(); return;
   }
   try{
+    const params = new URLSearchParams();
+    params.append("fecha", datos.fecha);
+    params.append("nombre", datos.nombre);
+    params.append("email", datos.email);
+    params.append("hora", datos.hora);
     await fetch(CONFIG.endpoint,{
       method:"POST",
-      headers:{"Content-Type":"text/plain;charset=utf-8"}, // evita preflight CORS
-      body: JSON.stringify(datos)
+      body: params   // Content-Type application/x-www-form-urlencoded (sin preflight, sobrevive el redirect)
     });
     INSCRIPCIONES.push({fecha:datos.fecha,nombre:datos.nombre,hora:datos.hora}); // optimista
     form.classList.remove("open");
